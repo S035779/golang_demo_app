@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link type="image/x-icon" rel="shortcut icon" href="/public/img/favicon.ico">
+  <title>{{ template "title" . }}</title>
+  <!-- Bootstrap core CSS -->
+  <link href="/public/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/public/css/style.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Header -->
+  <div class="pos-f-t">
+    <div class="collapse" id="navbarToggleExternalContent">
+      <div class="bg-dark p-4">
+        {{ if .session.IsAlive }}
+        <a class="text-white nav-link" href="/client">マイページ</span></a>
+        <a class="text-white nav-link" href="/client/about">利用規約</a>
+        <a class="text-white nav-link" href="/client/contact">ユーザ情報</a>
+        <a class="text-white nav-link" href="/client/message">メッセージ</a>
+        <a class="text-white nav-link" href="/account/signout">ログアウト</a>
+        {{ else }}
+        <a class="text-white nav-link" href="/account/signup">会員登録</a>
+        <a class="text-white nav-link" href="/account/signin">ログイン</a>
+        {{ end }}
+      </div>
+    </div><!--/.nav-collapse -->
+    <div class="navbar navbar-dark bg-dark" role="navigation">
+      <button type="button" class="navbar-toggler" data-toggle="collapse" 
+        data-target="#navbarToggleExternalContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="/client">Gin Framework Boilerplate</a>
+    </div>
+  </div>
+  <!-- /Header -->
+  <!-- Message -->
+  <div class="m-1">
+    {{ if .error }}
+    <div class="alert alert-danger" role="alert">{{ .error }}</div>
+    {{ end }}
+    {{ if .message }}
+    <div class="alert alert-success" role="alert">{{ .message }}</div>
+    {{ end }}
+  </div>
+  <!-- /Message -->
+  <!-- Container -->
+  <div class="container">
+    {{ template "content" . }}
+  </div>
+  <!-- /Container -->
+  <!-- Footer -->
+  <footer class="footer bg-dark">
+    <div class="footer-text text-white-50 text-center py-3">© 2019 Copyright:
+      <a class="text-white" href="{{ .baseurl }}">Example</a>
+    </div>
+  </footer>
+  <!-- /Footer -->
+  <script src="/public/js/jquery.min.js"></script>
+  <script src="/public/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

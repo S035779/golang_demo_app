@@ -1,0 +1,52 @@
+{{ define "title" }}SignUp{{ end }}
+
+{{ define "content" }}
+<div class="row justify-content-center mt-4">
+  <div class="col-md-5 col-sm-7">
+    <form class="form-signin" role="form" action="{{ .url }}" method="POST">
+      <h2 class="form-signin-heading">サインアップ</h2>
+      <div class="form-group">
+        <label for="username">ユーザ名</label>
+        <input type="text" class="form-control" name="username"
+          id="username" value="" placeholder="Username" required autofocus>
+      </div>
+      <div class="form-group">
+        <label for="password">パスワード</label>
+        <input type="password" class="form-control" name="password"
+          id="password" value="" placeholder="Password" required>
+      </div>
+      <div class="form-group">
+        <label for="confirm">パスワード（再入力）</label>
+        <input type="password" class="form-control" name="confirm"
+          id="confirm" value="" placeholder="Confirm Password" required>
+      </div>
+      <div class="form-group">
+        <label for="firstname">ファーストネーム</label>
+        <input type="text" class="form-control" name="firstname"
+          id="firstName" value="" placeholder="Firstname" required>
+      </div>
+      <div class="form-group">
+        <label for="lastname">ラストネーム</label>
+        <input type="text" class="form-control" name="lastname"
+          id="lastName" value="" placeholder="Lastname" required>
+      </div>
+      <div class="form-group">
+        <label for="email">メールアドレス</label>
+        <input type="email" class="form-control" name="email"
+          id="email" value="" placeholder="Email address" required>
+      </div>
+      <div class="form-group form-check text-center">
+        <input type="checkbox" class="form-check-input" name="agree"
+          id="agree" value="yes"> 
+        <label for="agree" class="form-check-label text-muted">
+          規約に同意する
+        </label>
+      </div>
+      <button type="submit" class="btn btn-lg btn-primary btn-block" name="action"
+        id="action" value="regist">
+        サインアップ
+      </button>
+    </form>
+  </div>
+</div>
+{{ end }}

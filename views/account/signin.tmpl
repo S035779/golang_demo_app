@@ -1,0 +1,34 @@
+{{ define "title" }}SignIn{{ end }}
+
+{{ define "content" }}
+
+<div class="row justify-content-center mt-4">
+  <div class="col-md-5 col-sm-7">
+    <form class="form-signin" role="form" action="{{ .posturl }}" method="POST">
+      <h2 class="form-signin-heading">ログイン</h2>
+      <div class="form-group">
+        <label for="username">ユーザ名</label>
+        <input type="text" class="form-control" name="username" 
+          id="username" placeholder="Username" required autofocus> 
+      </div>
+      <div class="form-group">
+        <label for="password">パスワード</label>
+        <input type="password" class="form-control" name="password" 
+          id="password" placeholder="Password" required>
+      </div>
+      <div class="form-group form-check text-center">
+        <input type="checkbox" class="form-check-input" name="remember_me"
+          id="remember_me" value="yes" {{ .remember_me }}> 
+        <label for="remember_me" class="form-check-label text-muted">
+          ログイン状態を保存
+        </label>
+      </div>
+      <button type="submit" class="btn btn-lg btn-warning btn-block" name="action"
+        id="action" value="login">
+        ログイン
+      </button>
+    </form>
+  </div>
+</div>
+
+{{ end }}

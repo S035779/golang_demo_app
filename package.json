@@ -1,0 +1,14 @@
+{
+  "name": "golang_demo_app1",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {},
+  "scripts": {
+    "start:https": "go run *.go -cert ssl/server-cert.pem -key ssl/server-key.pem -user mamoru_hashimoto -pass mamo1114 -port 8080 -verbose",
+    "start:http": "go run *.go -user mamoru_hashimoto -pass mamo1114 -port 8080 -verbose",
+    "log:access": "tail -f logs/access.log",
+    "log:errors": "tail -f logs/errors.log"
+  }
+}
