@@ -3,9 +3,15 @@
 {{ define "content" }}
 
 <div class="row justify-content-center mt-4">
-  <div class="col-md-5 col-sm-7">
-    <pre id="output"></pre>
-    <input type="button" id="send" value="送信" />
+  <div class="col-md-10 col-sm-7">
+    <ul class="list-group">
+      <li class="list-group-item"><pre id="output"></pre></li>
+      <li class="list-group-item">
+        <button type="button" class="btn btn-dark" id="send">送信</button>
+        <button type="button" class="btn btn-dark" id="close">切断</button>
+        <button type="button" class="btn btn-outline-dark" id="open">接続</button>
+      </li>
+    </ul>
   </div>
 </div>
 <script src="/public/js/message.js"></script>
