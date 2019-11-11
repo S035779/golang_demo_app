@@ -30,6 +30,7 @@ var (
   log *logger.StdLog
   engine *gin.Engine
   templates map[string]*template.Template
+  adminTemplates map[string]*template.Template
   assets map[string]*asset
 )
 
@@ -40,39 +41,74 @@ func init() {
   var fh,   _ = os.Create("logs/access.log")
   gin.DefaultWriter = io.MultiWriter(fh)
 
-  loadTemplates(
+  templates = loadTemplates(
     "views/layout/_base.tmpl",
     map[string]string{
-      "signin" : "views/account/signin.tmpl",
-      "signup" : "views/account/signup.tmpl",
-      "home"   : "views/client/home.tmpl",
-      "contact": "views/client/contact.tmpl",
-      "about"  : "views/client/about.tmpl",
-      "message": "views/client/message.tmpl",
-      "posta"  : "views/client/posta.tmpl",
-      "postb"  : "views/client/postb.tmpl",
+      "signin":   "views/account/signin.tmpl",
+      "signup":   "views/account/signup.tmpl",
+      "client":   "views/client/home.tmpl",
+      "contact":  "views/client/contact.tmpl",
+      "about":    "views/client/about.tmpl",
+      "message":  "views/client/message.tmpl",
+      "posta":    "views/client/posta.tmpl",
+      "postb":    "views/client/postb.tmpl",
     },
   )
 
-  loadAssets(
+  adminTemplates = loadTemplates(
+    "views/layout/_admin.tmpl",
     map[string]string{
-      "jquery":       "public/js/jquery.min.js",
-      "bootstrapJS":  "public/js/bootstrap.bundle.min.js",
-      "bootstrapCSS": "public/css/bootstrap.min.css",
-      "style":        "public/css/style.css",
+      "admin":    "views/admin/home.tmpl",
+      "geta":     "views/admin/geta.tmpl",
+    },
+  )
+
+  assets = loadAssets(
+    map[string]string{
+      "jquery":         "public/js/jquery.min.js",
+      "popperJS":       "public/js/popper.js",
+      "bootstrapJS":    "public/js/bootstrap.min.js",
+      "materialJS":     "public/js/mdb.min.js",
+      "adminJS":        "public/js/admin.js",
+      "clientJS":       "public/js/client.js",
+      "bootstrapCSS":   "public/css/bootstrap.min.css",
+      "materialCSS":    "public/css/mdb.min.css",
+      "adminCSS":       "public/css/admin.css",
+      "clientCSS":      "public/css/client.css",
+      "Bold_eot":       "public/font/roboto/Roboto-Bold.eot",
+      "Bold_ttf":       "public/font/roboto/Roboto-Bold.ttf",
+      "Bold_woff":      "public/font/roboto/Roboto-Bold.woff",
+      "Bold_woff2":     "public/font/roboto/Roboto-Bold.woff2",
+      "Light_eot":      "public/font/roboto/Roboto-Light.eot",
+      "Light_ttf":      "public/font/roboto/Roboto-Light.ttf",
+      "Light_woff":     "public/font/roboto/Roboto-Light.woff",
+      "Light_woff2":    "public/font/roboto/Roboto-Light.woff2",
+      "Medium_eot":     "public/font/roboto/Roboto-Medium.eot",
+      "Medium_ttf":     "public/font/roboto/Roboto-Medium.ttf",
+      "Medium_woff":    "public/font/roboto/Roboto-Medium.woff",
+      "Medium_woff2":   "public/font/roboto/Roboto-Medium.woff2",
+      "Regular_eot":    "public/font/roboto/Roboto-Regular.eot",
+      "Regular_ttf":    "public/font/roboto/Roboto-Regular.ttf",
+      "Regular_woff":   "public/font/roboto/Roboto-Regular.woff",
+      "Regular_woff2":  "public/font/roboto/Roboto-Regular.woff2",
+      "Thin_eot":       "public/font/roboto/Roboto-Thin.eot",
+      "Thin_ttf":       "public/font/roboto/Roboto-Thin.ttf",
+      "Thin_woff":      "public/font/roboto/Roboto-Thin.woff",
+      "Thin_woff2":     "public/font/roboto/Roboto-Thin.woff2",
     },
   )
 }
 
-func loadTemplates(base string, page map[string]string) {
-  templates = make(map[string]*template.Template)
+func loadTemplates(base string, page map[string]string) map[string]*template.Template {
+  var templates = make(map[string]*template.Template)
   for k, v := range page {
     templates[k] = template.Must(template.ParseFiles(base, v))
   }
+  return templates
 }
 
-func loadAssets(files map[string]string) {
-  assets = make(map[string]*asset)
+func loadAssets(files map[string]string) map[string]*asset{
+  var assets = make(map[string]*asset)
   for k, v := range files {
     if file, err := ioutil.ReadFile(v); err != nil {
       assets[k] = &asset{
@@ -81,6 +117,7 @@ func loadAssets(files map[string]string) {
       }
     }
   }
+  return assets
 }
 
 func Router(user string, pass string, stdlog *logger.StdLog) *gin.Engine {
@@ -104,16 +141,16 @@ func Router(user string, pass string, stdlog *logger.StdLog) *gin.Engine {
 
   var account = engine.Group("/account", checkAccount())
   {
-    account.GET( "/signin",     SignInForm  )
-    account.POST("/signin",     SignIn      )
-    account.GET( "/signup",     SignUpForm  )
-    account.POST("/signup",     SignUp      )
-    account.GET( "/signout",    SignOut     )
+    account.GET( "/signin/:page",  SignInForm  )
+    account.POST("/signin/:page",  SignIn      )
+    account.GET( "/signup/:page",  SignUpForm  )
+    account.POST("/signup/:page",  SignUp      )
+    account.GET( "/signout/:page", SignOut     )
   }
 
   var client = engine.Group("/client", checkClient())
   {
-    client.GET( "/",            Home      )
+    client.GET( "/",            Client    )
     client.GET( "/contact",     Contact   )
     client.GET( "/about",       About     )
     client.GET( "/message",     Message   )
@@ -123,10 +160,15 @@ func Router(user string, pass string, stdlog *logger.StdLog) *gin.Engine {
     client.POST("/postb",       PostBData )
   }
 
+  var admin = engine.Group("/admin", checkAdmin())
+  {
+    admin.GET("/",              Admin   )
+    admin.GET( "/geta",         GetAData) 
+  }
+
   var api = engine.Group("/api", checkApi(user, pass))
   {
     api.GET( "/ping",           PingData )
-    api.GET( "/geta",           GetAData ) 
     api.GET( "/getb",           GetBData ) 
     api.GET( "/getc",           GetCData ) 
     api.GET( "/getd",           GetDData ) 
@@ -138,7 +180,7 @@ func Router(user string, pass string, stdlog *logger.StdLog) *gin.Engine {
     public.Static("/img",       "assets/img/"   )
     public.Static("/css",       "assets/css/"   )
     public.Static("/js",        "assets/js/"    )
-    public.Static("/fonts",     "assets/fonts/" )
+    public.Static("/font",      "assets/font/" )
   }
 
   var websocket = wsservice.NewRouter(log)
@@ -187,7 +229,20 @@ func checkClient() gin.HandlerFunc {
     var session Session
     if !session.checkSession(c) {
       session.clearSession(c)
-      c.Redirect(http.StatusMovedPermanently, "/account/signin")
+      c.Redirect(http.StatusMovedPermanently, "/account/signin/client")
+      c.Abort()
+    }
+    c.Set("baseurl", RootUrl)
+    pushAssets(c)
+  }
+}
+
+func checkAdmin() gin.HandlerFunc {
+  return func(c *gin.Context) {
+    var session Session
+    if !session.checkSession(c) {
+      session.clearSession(c)
+      c.Redirect(http.StatusMovedPermanently, "/account/signin/admin")
       c.Abort()
     }
     c.Set("baseurl", RootUrl)

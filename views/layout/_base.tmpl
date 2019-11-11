@@ -9,7 +9,8 @@
   <title>{{ template "title" . }}</title>
   <!-- Bootstrap core CSS -->
   <link href="/public/css/bootstrap.min.css" rel="stylesheet">
-  <link href="/public/css/style.css" rel="stylesheet">
+  <link href="/public/css/mdb.min.css" rel="stylesheet">
+  <link href="/public/css/client.css" rel="stylesheet">
 </head>
 <body>
   <!-- Header -->
@@ -21,10 +22,10 @@
         <a class="text-white nav-link" href="/client/about">利用規約</a>
         <a class="text-white nav-link" href="/client/contact">ユーザ情報</a>
         <a class="text-white nav-link" href="/client/message">メッセージ</a>
-        <a class="text-white nav-link" href="/account/signout">ログアウト</a>
+        <a class="text-white nav-link" href="/account/signout/client">ログアウト</a>
         {{ else }}
-        <a class="text-white nav-link" href="/account/signup">会員登録</a>
-        <a class="text-white nav-link" href="/account/signin">ログイン</a>
+        <a class="text-white nav-link" href="/account/signup/client">会員登録</a>
+        <a class="text-white nav-link" href="/account/signin/client">ログイン</a>
         {{ end }}
       </div>
     </div><!--/.nav-collapse -->
@@ -59,7 +60,10 @@
     </div>
   </footer>
   <!-- /Footer -->
-  <script src="/public/js/jquery.min.js"></script>
-  <script src="/public/js/bootstrap.bundle.min.js"></script>
+  <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/public/js/popper.js"></script>
+  <script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/public/js/mdb.min.js"></script>
+	<script type="text/javascript" src="/public/js/client.js"></script>
 </body>
 </html>

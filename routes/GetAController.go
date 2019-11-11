@@ -12,7 +12,7 @@ type Item struct {
   Name string
 }
 func GetAData(c *gin.Context) {
-  c.HTML(http.StatusOK, "index.tmpl", gin.H{
+  c.HTML(http.StatusOK, "geta.tmpl", gin.H{
     "a": "a",
     "b": []string{ "b_todo1", "b_todo2" },
     "c": []Item{{ 1, "c_mika" }, { 2, "c_risa" }},
