@@ -12,8 +12,8 @@ type myForm struct {
 }
 
 func PostAForm (c *gin.Context) {
-  engine.SetHTMLTemplate(templates["posta"])
-  c.HTML(http.StatusOK, "_base.tmpl", gin.H{
+  engine.SetHTMLTemplate(clientTemplates["posta"])
+  c.HTML(http.StatusOK, "_client.tmpl", gin.H{
     "url":      "/client/posta",
     "color_a":  "red",
     "color_b":  "green",

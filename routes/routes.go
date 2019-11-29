@@ -29,7 +29,8 @@ type asset struct{
 var (
   log *logger.StdLog
   engine *gin.Engine
-  templates map[string]*template.Template
+  accountTemplates map[string]*template.Template
+  clientTemplates map[string]*template.Template
   adminTemplates map[string]*template.Template
   assets map[string]*asset
 )
@@ -41,12 +42,18 @@ func init() {
   var fh,   _ = os.Create("logs/access.log")
   gin.DefaultWriter = io.MultiWriter(fh)
 
-  templates = loadTemplates(
-    "views/layout/_base.tmpl",
+  accountTemplates = loadTemplates(
+    "views/layout/_account.tmpl",
     map[string]string{
       "signin":   "views/account/signin.tmpl",
       "signup":   "views/account/signup.tmpl",
-      "client":   "views/client/home.tmpl",
+    },
+  )
+
+  clientTemplates = loadTemplates(
+    "views/layout/_client.tmpl",
+    map[string]string{
+      "home":     "views/client/home.tmpl",
       "contact":  "views/client/contact.tmpl",
       "about":    "views/client/about.tmpl",
       "message":  "views/client/message.tmpl",
@@ -58,7 +65,7 @@ func init() {
   adminTemplates = loadTemplates(
     "views/layout/_admin.tmpl",
     map[string]string{
-      "admin":    "views/admin/home.tmpl",
+      "home":     "views/admin/home.tmpl",
       "geta":     "views/admin/geta.tmpl",
     },
   )
@@ -66,35 +73,11 @@ func init() {
   assets = loadAssets(
     map[string]string{
       "jquery":         "public/js/jquery.min.js",
-      "popperJS":       "public/js/popper.js",
+      "popperJS":       "public/js/popper.min.js",
       "bootstrapJS":    "public/js/bootstrap.min.js",
-      "materialJS":     "public/js/mdb.min.js",
-      "adminJS":        "public/js/admin.js",
-      "clientJS":       "public/js/client.js",
       "bootstrapCSS":   "public/css/bootstrap.min.css",
-      "materialCSS":    "public/css/mdb.min.css",
-      "adminCSS":       "public/css/admin.css",
-      "clientCSS":      "public/css/client.css",
-      "Bold_eot":       "public/font/roboto/Roboto-Bold.eot",
-      "Bold_ttf":       "public/font/roboto/Roboto-Bold.ttf",
-      "Bold_woff":      "public/font/roboto/Roboto-Bold.woff",
-      "Bold_woff2":     "public/font/roboto/Roboto-Bold.woff2",
-      "Light_eot":      "public/font/roboto/Roboto-Light.eot",
-      "Light_ttf":      "public/font/roboto/Roboto-Light.ttf",
-      "Light_woff":     "public/font/roboto/Roboto-Light.woff",
-      "Light_woff2":    "public/font/roboto/Roboto-Light.woff2",
-      "Medium_eot":     "public/font/roboto/Roboto-Medium.eot",
-      "Medium_ttf":     "public/font/roboto/Roboto-Medium.ttf",
-      "Medium_woff":    "public/font/roboto/Roboto-Medium.woff",
-      "Medium_woff2":   "public/font/roboto/Roboto-Medium.woff2",
-      "Regular_eot":    "public/font/roboto/Roboto-Regular.eot",
-      "Regular_ttf":    "public/font/roboto/Roboto-Regular.ttf",
-      "Regular_woff":   "public/font/roboto/Roboto-Regular.woff",
-      "Regular_woff2":  "public/font/roboto/Roboto-Regular.woff2",
-      "Thin_eot":       "public/font/roboto/Roboto-Thin.eot",
-      "Thin_ttf":       "public/font/roboto/Roboto-Thin.ttf",
-      "Thin_woff":      "public/font/roboto/Roboto-Thin.woff",
-      "Thin_woff2":     "public/font/roboto/Roboto-Thin.woff2",
+      "menuJS":         "public/js/mmenu-js/mmenu.js",
+      "menuCSS":        "public/js/mmenu-js/mmenu.css",
     },
   )
 }
@@ -162,7 +145,7 @@ func Router(user string, pass string, stdlog *logger.StdLog) *gin.Engine {
 
   var admin = engine.Group("/admin", checkAdmin())
   {
-    admin.GET("/",              Admin   )
+    admin.GET( "/",             Admin   )
     admin.GET( "/geta",         GetAData) 
   }
 
@@ -181,6 +164,7 @@ func Router(user string, pass string, stdlog *logger.StdLog) *gin.Engine {
     public.Static("/css",       "assets/css/"   )
     public.Static("/js",        "assets/js/"    )
     public.Static("/font",      "assets/font/" )
+    public.Static("/webfonts",  "assets/font/webfonts/" )
   }
 
   var websocket = wsservice.NewRouter(log)

@@ -1,7 +1,6 @@
 {{ define "title" }}PostB{{ end }}
 
 {{ define "content" }}
-
 <form action="{{ .url }}" method="POST">
   <label for="name">Name</label>
   <input type="text" id="name" name="name" value="{{ .name }}">
@@ -11,4 +10,12 @@
   <input type="text" id="birthday" name="birthday" value="{{ .birthday }}">
   <input type="submit" />
 </form>
+{{ end }}
+
+{{ define "css" }}
+<link rel="stylesheet" href="/public/css/client.css">
+{{ end }}
+
+{{ define "script" }}
+<script src="/public/js/client.js"></script>
 {{ end }}

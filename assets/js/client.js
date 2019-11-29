@@ -1,67 +1,33 @@
-var sock = null;
-var uri  = 'wss://localhost.localdomain:8080/ws';
-
-var open = function() {
-  if(sock && sock.readState !== 1) {
-    connect();
-  }
-};
-
-var close = function() {
-  if(sock && sock.readyState === 1) {
-    disconnect();
-  }
-};
-
-var send = function(msgid, body) {
-  var packet = { 'id': msgid, 'body': body };
-  var json = JSON.stringify(packet)
-  message(json);
-};
-
-var message = function(json) {
-  sock.send(json);
-};
-
-var disconnect = function() {
-  sock.close();
-};
-
-var connect = function() {
-  sock = new WebSocket(uri);
-
-  sock.onopen = function(e) {
-    $("#output").append((new Date()) + " ===> " + "Connect success.\n")
-
-    $('#open').off();
-    $("#close").click(function(e) {
-      close();
-    });
-    $("#send").click(function(e) {
-      var msg = "PING";
-      $("#output").append((new Date()) + " ===> " + msg + "\n")
-      send(1, { 'msg': msg });
-    });
-  };
-
-  sock.onclose = function(e) {
-    $("#output").append((new Date()) + " <=== " + "Connect close.\n")
-
-    $('#send').off();
-    $('#close').off();
-    $("#open").click(function(e) {
-      open();
-    });
-  };
-
-  sock.onmessage = function(e) {
-    var json = JSON.parse(e.data)
-    var msgid = json.id;
-    var body = json.body;
-    if (msgid == 1) {
-      $("#output").append((new Date()) + " <=== " + body.msg + "\n");
+document.addEventListener("DOMContentLoaded", () => {
+  new Mmenu("#navmenu", { 
+    extensions: ["theme-black", "fx-menu-slide", "pagedim-black"]
+  , counters: true
+  , iconbar: {
+      use: true
+    , top: [
+        "<a href='#/'><i class='fa fa-home'></i></a>" // ok
+      , "<a href='#/'><i class='fa fa-user'></i></a>" // ok
+      ]
+    , bottom: [
+        "<a href='#/'><i class='fab fa-twitter'></i></a>"
+      , "<a href='#/'><i class='fab fa-facebook-f'></i></a>"
+      , "<a href='#/'><i class='fab fa-linkedin-in'></i></a>"
+      ]
     }
-  };
-};
+  , iconPanels: true
+  , navbars: [ 
+      { 
+         "position": "top", "content": ["prev", "title"]
+      }
+    , { 
+        "position": "bottom", "content": [
+          "<a class='fas fa-envelope' href='#/'></a>"   // ok
+        , "<a class='fab fa-twitter' href='#/'></a>"    // ok
+        , "<a class='fab fa-facebook-f' href='#/'></a>" // ok
+        ]
+      }
+    ]
+  , sidebar: { collapsed: "(min-width: 640px)", expanded: "(min-width: 1200px)" }
+  });
+});
 
-connect();

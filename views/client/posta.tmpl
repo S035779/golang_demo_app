@@ -1,7 +1,6 @@
 {{ define "title" }}PostA{{ end }}
 
 {{ define "content" }}
-
 <form action="{{ .url  }}" method="POST">
   <p>Check some colors</p>
   <label for="red">Red</label>
@@ -12,4 +11,12 @@
   <input type="checkbox" name="colors[]" value="{{ .color_c }}" id="blue" />
   <input type="submit" />
 </form>
+{{ end }}
+
+{{ define "css" }}
+<link rel="stylesheet" href="/public/css/client.css">
+{{ end }}
+
+{{ define "script" }}
+<script src="/public/js/client.js"></script>
 {{ end }}

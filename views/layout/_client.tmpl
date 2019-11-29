@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link type="image/x-icon" rel="shortcut icon" href="/public/img/favicon.ico">
+  <title>{{ template "title" . }}</title>
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/public/css/mdb.min.css">
+  <link rel="stylesheet" href="/public/css/all.min.css">
+  <link rel="stylesheet" href="/public/js/mmenu-js/mmenu.css">
+  <link rel="stylesheet" href="/public/css/mburger.css">
+  {{ template "css" . }}
+</head>
+<body>
+
+  <!-- SideNavi -->
+  <nav id="navmenu">
+    <ul>
+      {{ if .session.IsAlive }}
+      <li><a href="/client">マイページ</span></a></li>
+      <li><a href="/client/about">利用規約</a></li>
+      <li><a href="/client/contact">ユーザ情報</a></li>
+      <li><a href="/client/message">メッセージ</a></li>
+      <li><a href="/account/signout/client">ログアウト</a></li>
+      {{ else }}
+      <li><a href="/account/signup/client">会員登録</a></li>
+      <li><a href="/account/signin/client">ログイン</a></li>
+      {{ end }}
+    </ul>
+  </nav>
+  <!-- /.SideNavi -->
+
+  <!-- Header -->
+  <div class="navbar fixed-top navbar-dark bg-dark">
+    <a class="mburger mburger--collapse text-white" href="#navmenu">
+      <b></b>
+      <b></b>
+      <b></b>
+    </a>
+    <a class="navbar-brand" href="/client">Gin Framework Boilerplate</a>
+  </div>
+  <!-- /.Header -->
+  
+  <!-- Container -->
+  <div class="container-fluid">
+    <section id="client" class="wow fadeIn">
+      <!-- Error -->
+      {{ if .error }}
+      <div class="m-1">
+        <div class="alert alert-danger" role="alert">{{ .error }}</div>
+      </div>
+      {{ end }}
+      <!-- /.Error -->
+
+      <!-- Message -->
+      {{ if .message }}
+      <div class="m-1">
+        <div class="alert alert-success" role="alert">{{ .message }}</div>
+      </div>
+      {{ end }}
+      <!-- /.Message -->
+
+      {{ template "content" . }}
+    </section>
+  </div>
+  <!-- /.Container -->
+   
+  <!-- Footer -->
+  <div class="page-footer bg-dark fixed-bottom text-center wow fadeIn">
+    <div class="footer-copyright py-3 text-white-50">© 2019 Copyright:
+      <a class="text-white" href="{{ .baseurl }}">{{ .sitename }}</a>
+    </div>
+  </div>
+  <!-- /.Footer -->
+
+</body>
+<script src="/public/js/jquery.min.js"></script>
+<script src="/public/js/popper.min.js"></script>
+<script src="/public/js/bootstrap.min.js"></script>
+<script src="/public/js/mdb.min.js"></script>
+<script src="/public/js/mmenu-js/mmenu.js"></script>
+{{ template "script" . }}
+</html>

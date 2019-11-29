@@ -30,8 +30,8 @@ func SignUpForm(c *gin.Context) {
 
   var uri SignUpUri
   if err := c.ShouldBindUri(&uri); err !=nil {
-    engine.SetHTMLTemplate(templates["signup"])
-    c.HTML(http.StatusBadRequest, "_base.tmpl", gin.H{ 
+    engine.SetHTMLTemplate(accountTemplates["signup"])
+    c.HTML(http.StatusBadRequest, "_account.tmpl", gin.H{ 
       "session": session,
       "posturl": "/account/signup/" + uri.Page,
       "baseurl": c.MustGet("baseurl").(string),
@@ -40,8 +40,8 @@ func SignUpForm(c *gin.Context) {
     return
   }
 
-  engine.SetHTMLTemplate(templates["signup"])
-  c.HTML(http.StatusOK, "_base.tmpl", gin.H{
+  engine.SetHTMLTemplate(accountTemplates["signup"])
+  c.HTML(http.StatusOK, "_account.tmpl", gin.H{
     "session": session,
     "posturl": "/account/signup/" + uri.Page,
     "baseurl": c.MustGet("baseurl").(string),
@@ -54,8 +54,8 @@ func SignUp(c *gin.Context) {
 
   var uri SignUpUri
   if err := c.ShouldBindUri(&uri); err !=nil {
-    engine.SetHTMLTemplate(templates["signup"])
-    c.HTML(http.StatusBadRequest, "_base.tmpl", gin.H{ 
+    engine.SetHTMLTemplate(accountTemplates["signup"])
+    c.HTML(http.StatusBadRequest, "_account.tmpl", gin.H{ 
       "session": session,
       "posturl": "/account/signup/" + uri.Page,
       "baseurl": c.MustGet("baseurl").(string),
@@ -66,8 +66,8 @@ func SignUp(c *gin.Context) {
 
   var form Regist
   if err := c.ShouldBind(&form); err != nil {
-    engine.SetHTMLTemplate(templates["signup"])
-    c.HTML(http.StatusBadRequest, "_base.tmpl", gin.H{ 
+    engine.SetHTMLTemplate(accountTemplates["signup"])
+    c.HTML(http.StatusBadRequest, "_account.tmpl", gin.H{ 
       "session": session,
       "posturl": "/account/signup/" + uri.Page,
       "baseurl": c.MustGet("baseurl").(string),
@@ -77,8 +77,8 @@ func SignUp(c *gin.Context) {
   }
 
   if err, id := registUser(&form); err != nil {
-    engine.SetHTMLTemplate(templates["signup"])
-    c.HTML(http.StatusUnauthorized, "_base.tmpl", gin.H{ 
+    engine.SetHTMLTemplate(accountTemplates["signup"])
+    c.HTML(http.StatusUnauthorized, "_account.tmpl", gin.H{ 
       "session": session,
       "posturl": "/account/signup/" + uri.Page,
       "baseurl": c.MustGet("baseurl").(string),
@@ -95,12 +95,21 @@ func SignUp(c *gin.Context) {
 
   session.getSession(c)
 
-  engine.SetHTMLTemplate(templates[uri.Page])
-  c.HTML(http.StatusOK, "_base.tmpl", gin.H{ 
-    "session": session,
-    "baseurl": c.MustGet("baseurl").(string),
-    "message": fmt.Sprintf("Welcome!! %s.", session.nickname),
-  })
+  if uri.Page == "admin" {
+    engine.SetHTMLTemplate(adminTemplates["home"])
+    c.HTML(http.StatusOK, "_admin.tmpl", gin.H{ 
+      "session": session,
+      "baseurl": c.MustGet("baseurl").(string),
+      "message": fmt.Sprintf("Welcome!! %s.", session.nickname),
+    })
+  } else {
+    engine.SetHTMLTemplate(clientTemplates["home"])
+    c.HTML(http.StatusOK, "_client.tmpl", gin.H{ 
+      "session": session,
+      "baseurl": c.MustGet("baseurl").(string),
+      "message": fmt.Sprintf("Welcome!! %s.", session.nickname),
+    })
+  } 
 }
 
 func registUser(regist *Regist) (error, int64) {

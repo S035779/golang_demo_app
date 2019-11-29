@@ -15,8 +15,8 @@ type Person struct {
 }
 
 func PostBForm (c *gin.Context) {
-  engine.SetHTMLTemplate(templates["postb"])
-  c.HTML(http.StatusOK, "_base.tmpl", gin.H{
+  engine.SetHTMLTemplate(clientTemplates["postb"])
+  c.HTML(http.StatusOK, "_client.tmpl", gin.H{
     "url":      "/client/postb",
     "name":     "applebody",
     "address":  "xyz",

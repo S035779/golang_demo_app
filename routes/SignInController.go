@@ -26,8 +26,8 @@ func SignInForm(c *gin.Context) {
 
   var uri SignInUri
   if err := c.ShouldBindUri(&uri); err !=nil {
-    engine.SetHTMLTemplate(templates["signin"])
-    c.HTML(http.StatusBadRequest, "_base.tmpl", gin.H{ 
+    engine.SetHTMLTemplate(accountTemplates["signin"])
+    c.HTML(http.StatusBadRequest, "_account.tmpl", gin.H{ 
       "session": session,
       "posturl": "/account/signin/" + uri.Page,
       "baseurl": c.MustGet("baseurl").(string),
@@ -41,8 +41,8 @@ func SignInForm(c *gin.Context) {
     checked = "checked"
   }
 
-  engine.SetHTMLTemplate(templates["signin"])
-  c.HTML(http.StatusOK, "_base.tmpl", gin.H{
+  engine.SetHTMLTemplate(accountTemplates["signin"])
+  c.HTML(http.StatusOK, "_account.tmpl", gin.H{
     "session": session,
     "remember_me": checked,
     "posturl": "/account/signin/" + uri.Page,
@@ -56,8 +56,8 @@ func SignIn(c *gin.Context) {
 
   var uri SignInUri
   if err := c.ShouldBindUri(&uri); err !=nil {
-    engine.SetHTMLTemplate(templates["signin"])
-    c.HTML(http.StatusBadRequest, "_base.tmpl", gin.H{ 
+    engine.SetHTMLTemplate(accountTemplates["signin"])
+    c.HTML(http.StatusBadRequest, "_account.tmpl", gin.H{ 
       "session": session,
       "posturl": "/account/signin/" + uri.Page,
       "baseurl": c.MustGet("baseurl").(string),
@@ -68,8 +68,8 @@ func SignIn(c *gin.Context) {
 
   var form Login
   if err := c.ShouldBind(&form); err != nil {
-    engine.SetHTMLTemplate(templates["signin"])
-    c.HTML(http.StatusBadRequest, "_base.tmpl", gin.H{ 
+    engine.SetHTMLTemplate(accountTemplates["signin"])
+    c.HTML(http.StatusBadRequest, "_account.tmpl", gin.H{ 
       "session": session,
       "posturl": "/account/signin/" + uri.Page,
       "baseurl": c.MustGet("baseurl").(string),
@@ -79,8 +79,8 @@ func SignIn(c *gin.Context) {
   }
 
   if err, ok, user := isUserExist(&form); err != nil {
-    engine.SetHTMLTemplate(templates["signin"])
-    c.HTML(http.StatusUnauthorized, "_base.tmpl", gin.H{ 
+    engine.SetHTMLTemplate(accountTemplates["signin"])
+    c.HTML(http.StatusUnauthorized, "_account.tmpl", gin.H{ 
       "session": session,
       "posturl": "/account/signin/" + uri.Page,
       "baseurl": c.MustGet("baseurl").(string),
@@ -88,8 +88,8 @@ func SignIn(c *gin.Context) {
     })
     return
   } else if !ok {
-    engine.SetHTMLTemplate(templates["signin"])
-    c.HTML(http.StatusUnauthorized, "_base.tmpl", gin.H{ 
+    engine.SetHTMLTemplate(accountTemplates["signin"])
+    c.HTML(http.StatusUnauthorized, "_account.tmpl", gin.H{ 
       "session": session,
       "posturl": "/account/signin/" + uri.Page,
       "baseurl": c.MustGet("baseurl").(string),
@@ -107,12 +107,21 @@ func SignIn(c *gin.Context) {
 
   session.getSession(c)
 
-  engine.SetHTMLTemplate(templates[uri.Page])
-  c.HTML(http.StatusOK, "_base.tmpl", gin.H{
-    "session": session,
-    "baseurl": c.MustGet("baseurl").(string),
-    "message": fmt.Sprintf("Welcome!! %s.", session.nickname),
-  })
+  if uri.Page == "admin" {
+    engine.SetHTMLTemplate(adminTemplates["home"])
+    c.HTML(http.StatusOK, "_admin.tmpl", gin.H{
+      "session": session,
+      "baseurl": c.MustGet("baseurl").(string),
+      "message": fmt.Sprintf("Welcome!! %s.", session.nickname),
+    })
+  } else {
+    engine.SetHTMLTemplate(clientTemplates["home"])
+    c.HTML(http.StatusOK, "_client.tmpl", gin.H{
+      "session": session,
+      "baseurl": c.MustGet("baseurl").(string),
+      "message": fmt.Sprintf("Welcome!! %s.", session.nickname),
+    })
+  }
 }
 
 func SignOut(c *gin.Context) {
@@ -121,8 +130,8 @@ func SignOut(c *gin.Context) {
 
   var uri SignInUri
   if err := c.ShouldBindUri(&uri); err !=nil {
-    engine.SetHTMLTemplate(templates["signin"])
-    c.HTML(http.StatusBadRequest, "_base.tmpl", gin.H{ 
+    engine.SetHTMLTemplate(accountTemplates["signin"])
+    c.HTML(http.StatusBadRequest, "_account.tmpl", gin.H{ 
       "session": session,
       "posturl": "/account/signin/" + uri.Page,
       "baseurl": c.MustGet("baseurl").(string),
@@ -131,8 +140,8 @@ func SignOut(c *gin.Context) {
     return
   }
 
-  engine.SetHTMLTemplate(templates["signin"])
-  c.HTML(http.StatusOK, "_base.tmpl", gin.H{
+  engine.SetHTMLTemplate(accountTemplates["signin"])
+  c.HTML(http.StatusOK, "_account.tmpl", gin.H{
     "session": session,
     "posturl": "/account/signin/" + uri.Page,
     "baseurl": c.MustGet("baseurl").(string),
