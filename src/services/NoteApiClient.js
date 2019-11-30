@@ -2,6 +2,8 @@ const LATENCY = 200;
 
 let notes = require('./data');
 let starred = [1, 2, 3];
+const users = [];
+let loggedIn = [];
 
 export default {
   request(response) {
@@ -12,6 +14,25 @@ export default {
 
   wait() {
     return new Promise(resolve => setTimeout(resolve, LATENCY));
+  },
+
+  registration(username, password) {
+    const id = users.length + 1;
+    const user = { id, username, password, updated: this.getUpdated() };
+    users.unshift(user);
+    return this.request(user);
+  },
+
+  authenticate(username, password) {
+    const user = users.find(user => user.username === username && user.password === password);
+    loggedIn.unshift(user.id);
+    return this.request(Object.assign({ isAuthenticated: loggedIn.includes(user.id) }, user));
+  },
+
+  signout(username) {
+    const user = users.find(user => user.username === username);
+    loggedIn = loggedIn.filter(id => id !== user.id);
+    return this.request(null);
   },
 
   getUpdated() {

@@ -18,7 +18,8 @@ class Dashboard extends React.Component {
     return getState('dashboardStore');
   }
 
-  static prefetch() {
+  static prefetch(props) {
+    console.log(props);
     return NoteAction.fetchMyNotes();
   }
 
@@ -34,7 +35,6 @@ class Dashboard extends React.Component {
     const { route, match } = this.props;
     const id = Object.keys(match.params).length === 0 ? 0 : Number(match.params.id);
     const note = this.state.notes.find(note => note.id === id);
-    const routes = renderRoutes(route.routes, { note: note });
     return <div className="page-Dashboard">
       <div className="page-Dashboard-list">
         <div className="page-Dashboard-listHeader">
@@ -44,7 +44,9 @@ class Dashboard extends React.Component {
           <NoteList notes={this.state.notes} selectedNoteId={id} />
         </div>
       </div>
-      <div className="page-Dashboard-main" role="form">{routes}</div>
+      <div className="page-Dashboard-main" role="form">
+        {renderRoutes(route.routes, { note: note })}
+      </div>
     </div>;
   }
 }
